@@ -1,23 +1,35 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 
 public class PlayerDetection : MonoBehaviour
 {
 
-    private List<string> tasks = new List<string>() { "Hammer", "Paper", "Ink", "Quest" };
+    public static Action OnTaskComplete;
+    public static Action OnNewQuest;
+
+    private bool task1 = false;
+    private bool task2 = false;
+    private bool task3 = false;
+
+    private void Awake()
+    {
+        PlayerAnimator.OnWorking += OnWorkingCallback;
+    }
+
+
+
+    private void OnDestroy()
+    {
+        PlayerAnimator.OnWorking -= OnWorkingCallback;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        PopulateTasks();
-    }
-
-    private void PopulateTasks()
-    {
-        tasks = new List<string>() { "Hammer", "Paper", "Ink", "Quest" };
+        
     }
 
     // Update is called once per frame
@@ -31,101 +43,164 @@ public class PlayerDetection : MonoBehaviour
         switch (other.tag)
         {
             case "Hammer":
-                Hammer();
+                if(Player.instance.GetPlayerTask() == Tasks.Hammering)
+                {
+                    Hammer();
+                }
                 break;
             case "Paper":
-                Paper();
+                if(Player.instance.GetPlayerTask() == Tasks.Paper)
+                {
+                    Paper();
+                }
                 break;
             case "Ink":
+                if(Player.instance.GetPlayerTask() == Tasks.Ink)
                 Ink();
                 break;
             case "Quest":
-                Quest();
+                if(Player.instance.GetPlayerTask() == Tasks.Quest)
+                {
+                    Quest();
+                }
                 break;
             case "Print":
-                Print();
+                if(Player.instance.GetPlayerTask() == Tasks.Printing)
+                {
+                    Print();
+                }
                 break;
         }
     }
 
     public void ExitTrigger()
     {
-        Debug.Log("Player is exiting the trigger");
         UIManager.instance.HidePrompt();
-        Player.instance.playerAnimator.StopPaperAnimation();
     }
 
     private void Hammer()
     {
+        SoundManager.instance.PlayHammerPickupSound();
         RegionalManager.instance.ShowPrintRegion();
-        Player.instance.SetTaskHammering();
     }
 
     private void Paper()
     {
+        SoundManager.instance.PlayPaperPickupSound();
         RegionalManager.instance.ShowPrintRegion();
-        Player.instance.SetTaskPaper();
     }
 
     private void Ink()
     {
+        SoundManager.instance.PlayInkPickupSound();
         RegionalManager.instance.ShowPrintRegion();
-        Player.instance.SetTaskInk();
     }
 
     private void Quest()
     {
         if (Player.instance.GetTaskComplete())
         {
+            SoundManager.instance.PlayQuestCompleteSound();
             GameManager.instance.AddCompletedTask();
         }
+        Player.instance.SetTaskPrinting();
         RegionalManager.instance.ShowPrintRegion();
+        OnNewQuest?.Invoke();
     }
 
     private void Print()
     {
-        switch (Player.instance.GetPlayerTask())
-        {
-            case Tasks.Hammering:
-                UIManager.instance.ShowHammerPrompt();
-                break;
-            case Tasks.Paper:
-                UIManager.instance.ShowKickPrompt();
-                break;
-            case Tasks.Ink:
-                UIManager.instance.ShowInkPrompt();
-                break;
-        }
         NewTask();
-
     }
 
     private void NewTask()
     {
-        
-        int randomAssignment = Random.Range(0, tasks.Count - 1);
-        Debug.Log($"randomAssignment is {randomAssignment}");
-        switch (tasks[randomAssignment])
+        UIManager.instance.HidePrompt();
+        int randomAssignment = UnityEngine.Random.Range(1, 4);
+        switch (randomAssignment)
         {
-            case "Quest":
-                RegionalManager.instance.ShowQuestRegion();
-                Player.instance.SetTaskComplete();
-                PopulateTasks();
+            case 1:
+                UIManager.instance.ShowPrintPrompt();
                 break;
-            case "Hammer":
+            case 2:
                 RegionalManager.instance.ShowHammerRegion();
-                tasks.Remove(tasks[randomAssignment]);
+                Player.instance.playerAnimator.StopAction();
+                SoundManager.instance.PlayHammerBreakSound();
+                Player.instance.SetTaskHammering();
                 break;
-            case "Paper":
+            case 3:
                 RegionalManager.instance.ShowPaperRegion();
-                tasks.Remove(tasks[randomAssignment]);
+                Player.instance.playerAnimator.StopAction();
+                SoundManager.instance.PlayPaperBreakSound();
+                Player.instance.SetTaskPaper();
                 break;
-            case "Ink":
+            case 4:
                 RegionalManager.instance.ShowInkRegion();
-                tasks.Remove(tasks[randomAssignment]);
+                Player.instance.playerAnimator.StopAction();
+                SoundManager.instance.PlayInkBreakSound();
+                Player.instance.SetTaskInk();
                 break;
         }
-
     }
 
+    private void OnWorkingCallback(float taskPercentage)
+    {
+        if(taskPercentage >= 1f)
+        {
+            Debug.Log("task is complete");
+            CompleteTask();
+        }
+        if(taskPercentage > 0.75f && taskPercentage < 1f)
+        {
+            CheckTask3();
+        } else if(taskPercentage > 0.5f && taskPercentage < 0.75f)
+        {
+            CheckTask2();
+        } else if(taskPercentage > 0.25f && taskPercentage < 0.5f)
+        {
+            CheckTask1();
+        }
+    }
+
+    private void CheckTask1()
+    {
+        if (task1)
+        {
+            return;
+        }
+        NewTask();
+        task1 = true;
+    }
+
+    private void CheckTask2()
+    {
+        if (task2)
+        {
+            return;
+        }
+        NewTask();
+        task2 = true;
+    }
+
+    private void CheckTask3()
+    {
+        if (task3)
+        {
+            return;
+        }
+        NewTask();
+        task3 = true;
+    }
+
+    private void CompleteTask()
+    {
+        RegionalManager.instance.HideAllRegions();
+        RegionalManager.instance.ShowQuestRegion();
+        Player.instance.SetTaskComplete();
+        task1 = false;
+        task2 = false;
+        task3 = false;
+        SoundManager.instance.PlayTaskCompleteSound();
+        OnTaskComplete?.Invoke();
+    }
 }

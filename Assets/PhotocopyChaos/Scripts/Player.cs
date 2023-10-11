@@ -7,7 +7,8 @@ public enum Tasks
     Hammering,
     Ink,
     Printing,
-    Paper
+    Paper,
+    Quest
 }
 
 public class Player : MonoBehaviour
@@ -36,13 +37,13 @@ public class Player : MonoBehaviour
     public PlayerAnimator playerAnimator;
 
     private bool taskCompleted = false;    
-    private Tasks playerTask = Tasks.Printing;
-
+    private Tasks playerTask = Tasks.Quest;
 
 
     public void SetTaskComplete()
     {
         taskCompleted = true;
+        playerTask = Tasks.Quest;
     }
 
     public void SetTaskIncomplete()

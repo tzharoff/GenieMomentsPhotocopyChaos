@@ -24,11 +24,11 @@ public class RegionalManager : MonoBehaviour
     #endregion
 
     [Header("Elements")]
-    [SerializeField] private QuestRegion questRegion;
-    [SerializeField] private PrintRegion printRegion;
-    [SerializeField] private InkRegion inkRegion;
-    [SerializeField] private HammerRegion hammerRegion;
-    [SerializeField] private PaperRegion paperRegion;
+    [SerializeField] private GameObject questRegion;
+    [SerializeField] private GameObject printRegion;
+    [SerializeField] private GameObject inkRegion;
+    [SerializeField] private GameObject hammerRegion;
+    [SerializeField] private GameObject paperRegion;
 
 
 
@@ -46,55 +46,55 @@ public class RegionalManager : MonoBehaviour
 
     public void ShowQuestRegion()
     {
-        questRegion.gameObject.SetActive(true);
-        printRegion.gameObject.SetActive(false);
-        inkRegion.gameObject.SetActive(false);
-        hammerRegion.gameObject.SetActive(false);
-        paperRegion.gameObject.SetActive(false);
+        questRegion.SetActive(true);
+        printRegion.SetActive(false);
+        inkRegion.SetActive(false);
+        hammerRegion.SetActive(false);
+        paperRegion.SetActive(false);
     }
 
     public void ShowPrintRegion()
     {
-        questRegion.gameObject.SetActive(false);
-        printRegion.gameObject.SetActive(true);
-        inkRegion.gameObject.SetActive(false);
-        hammerRegion.gameObject.SetActive(false);
-        paperRegion.gameObject.SetActive(false);
+        questRegion.SetActive(false);
+        printRegion.SetActive(true);
+        inkRegion.SetActive(false);
+        hammerRegion.SetActive(false);
+        paperRegion.SetActive(false);
     }
 
     public void ShowInkRegion()
     {
-        questRegion.gameObject.SetActive(false);
-        printRegion.gameObject.SetActive(false);
-        inkRegion.gameObject.SetActive(true);
-        hammerRegion.gameObject.SetActive(false);
-        paperRegion.gameObject.SetActive(false);
+        questRegion.SetActive(false);
+        printRegion.SetActive(false);
+        inkRegion.SetActive(true);
+        hammerRegion.SetActive(false);
+        paperRegion.SetActive(false);
     }
 
     public void ShowHammerRegion()
     {
-        questRegion.gameObject.SetActive(false);
-        printRegion.gameObject.SetActive(false);
-        inkRegion.gameObject.SetActive(false);
-        hammerRegion.gameObject.SetActive(true);
-        paperRegion.gameObject.SetActive(false);
+        questRegion.SetActive(false);
+        printRegion.SetActive(false);
+        inkRegion.SetActive(false);
+        hammerRegion.SetActive(true);
+        paperRegion.SetActive(false);
     }
 
     public void ShowPaperRegion()
     {
-        questRegion.gameObject.SetActive(false);
-        printRegion.gameObject.SetActive(false);
-        inkRegion.gameObject.SetActive(false);
-        hammerRegion.gameObject.SetActive(false);
-        paperRegion.gameObject.SetActive(true);
+        questRegion.SetActive(false);
+        printRegion.SetActive(false);
+        inkRegion.SetActive(false);
+        hammerRegion.SetActive(false);
+        paperRegion.SetActive(true);
     }
 
-    private void HideAllRegions()
+    public void HideAllRegions()
     {
-        questRegion.gameObject.SetActive(false);
-        printRegion.gameObject.SetActive(false);
-        inkRegion.gameObject.SetActive(false);
-        hammerRegion.gameObject.SetActive(false);
-        paperRegion.gameObject.SetActive(false);
+        questRegion.SetActive(false);
+        printRegion.SetActive(false);
+        inkRegion.SetActive(false);
+        hammerRegion.SetActive(false);
+        paperRegion.SetActive(false);
     }
 }

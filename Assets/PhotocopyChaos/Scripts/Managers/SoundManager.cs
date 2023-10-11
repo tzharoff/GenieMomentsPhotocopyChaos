@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,7 +27,7 @@ public class SoundManager : MonoBehaviour
     [Header("Pickup Sounds")]
     [SerializeField] private AudioSource hammerPickupSound;
     [SerializeField] private AudioSource paperPickupSound;
-    [SerializeField] private AudioSource tonerPickupSound;
+    [SerializeField] private AudioSource inkPickupSound;
 
     [Header("Success Sounds")]
     [SerializeField] private AudioSource questCompleteSound;
@@ -37,10 +38,15 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioSource printSound;
     [SerializeField] private AudioSource hammeringSound;
     [SerializeField] private AudioSource kickingSound;
-    [SerializeField] private AudioSource tonerSound;
+    [SerializeField] private AudioSource inkSound;
+
+    [Header("Break Sounds")]
+    [SerializeField] private AudioSource hammerBreakSound;
+    [SerializeField] private AudioSource paperBreakSound;
+    [SerializeField] private AudioSource inkBreakSound;
 
 
-#region SuccessSounds
+    #region SuccessSounds
     public void PlayQuestCompleteSound()
     {
         questCompleteSound.Play();
@@ -51,7 +57,7 @@ public class SoundManager : MonoBehaviour
         questTurnedInSound.Play();
     }
 
-    public void TaskCompleteSound()
+    public void PlayTaskCompleteSound()
     {
         taskCompleteSound.Play();
     }
@@ -70,9 +76,9 @@ public class SoundManager : MonoBehaviour
         paperPickupSound.Play();
     }
 
-    public void PlayTonerPickupSound()
+    public void PlayInkPickupSound()
     {
-        tonerPickupSound.Play();
+        inkPickupSound.Play();
     }
     #endregion
 
@@ -92,9 +98,24 @@ public class SoundManager : MonoBehaviour
         kickingSound.Play();
     }
 
-    public void PlayTonerSound()
+    public void PlayInkSound()
     {
-        tonerSound.Play();
+        inkSound.Play();
+    }
+
+    internal void PlayHammerBreakSound()
+    {
+        hammerBreakSound.Play();
+    }
+
+    internal void PlayPaperBreakSound()
+    {
+        paperBreakSound.Play();
+    }
+
+    internal void PlayInkBreakSound()
+    {
+        inkBreakSound.Play();
     }
     #endregion
 
